@@ -1,11 +1,15 @@
 {
   "name": "__MSG_extName__",
-  "version": "2",
+  "version": "3",
   "description": "__MSG_extDescription__",
   "icons": { 
     "16": "twitter.png",
     "48": "icon.png",
     "128": "icon.png"
+  },
+  "page_action": {
+    "default_icon": "twitter.png",
+    "default_title": "__MSG_availableCharacters__"
   },
   "default_locale": "en",
   "update_url": "http://github.com/abraham/omnitweet/raw/master/updates.xml",

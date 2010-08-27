@@ -1,10 +1,12 @@
 <html>
+  <head>
   <!-- Include OAuth JavaScript files -->
   <script type="text/javascript" src="chrome_ex_oauthsimple.js"></script>
   <script type="text/javascript" src="chrome_ex_oauth.js"></script>
   <script>
 // Is users location currently being updateed.
 var currentLocationRequest = false;
+var lastTabID = 0;
 // Build OAuth stuff.
 var oauth = ChromeExOAuth.initBackgroundPage({
   request_url: 'https://api.twitter.com/oauth/request_token',
@@ -41,7 +43,7 @@ function updateLocation() {
     return false;
   }
   currentLocationRequest = true;
-  console.log('Updating location');
+  console.log('Updating location...');
   // Get current location from browser.
   navigator.geolocation.getCurrentPosition(function(position) {
     if(!position) {
@@ -89,15 +91,29 @@ function onAuthorized() {
 // OmniBox selected OmnitTweet so update location.
 chrome.experimental.omnibox.onInputStarted.addListener(
   function() {
+    modifyPageAction(140);
     getLocations();
   });
+
+// OmniBox cancelled so remove character counter  
+chrome.experimental.omnibox.onInputCancelled.addListener(
+  function() {
+    // Remove page action if it exists.
+    if(lastTabID) {
+      chrome.pageAction.hide(lastTabID);
+      lastTabID = 0;    
+    }
+  }
+);
 
 // Suggest locations to user in OmniBox.
 chrome.experimental.omnibox.onInputChanged.addListener(
   function(text, suggest) {
     if ('' == text) {
+      modifyPageAction(140);
       return;
     }
+    modifyPageAction(140 - text.length);
     var places = getLocations();
     var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text}];
     // Only suggets locations if the are available.
@@ -121,6 +137,11 @@ chrome.experimental.omnibox.onInputChanged.addListener(
 // User hit enter so post tweet.
 chrome.experimental.omnibox.onInputEntered.addListener(
   function(content) {
+    // Remove page action if it exists
+    if(lastTabID) {
+      chrome.pageAction.hide(lastTabID);
+      lastTabID = 0;    
+    }
     // Vars for status create call to Twitter.
     var status;
     var place_id;
@@ -140,7 +161,7 @@ chrome.experimental.omnibox.onInputEntered.addListener(
           response.text
         );
         notification.show();
-        console.log(chrome.i18n.getMessage("tweetPosted"));
+        console.log('Tweet posted');
       }
     }
     var parameters = {
@@ -156,5 +177,36 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     oauth.sendSignedRequest(url, callback, parameters);
   }
 );
+
+// Change the count value of the page action.
+function modifyPageAction(count) {
+  chrome.tabs.getSelected(null, function(tab) {
+    lastTabID = tab.id;
+    chrome.pageAction.show(lastTabID);
+    chrome.pageAction.setIcon({imageData: drawCount(count), tabId: lastTabID});
+  });
+}
+
+// Draw the available character count page action.
+function drawCount(count) {
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.textAlign = "center";
+  context.fillStyle = '#CCCCCC';
+  context.textBaseline = "middle";
+  context.font = "bold 12px Helvetica Neue";
+  if (count < 10) {
+    context.fillStyle = '#D40D12';
+  } else if(count < 20) {
+    context.fillStyle = '#5C0002';
+  }
+  context.fillText(count, 9.5, 10);
+  return context.getImageData(0, 0, 19, 19);
+}
   </script>
+  </head>
+  <body>
+    <canvas id='canvas' width='19' height='19'></canvas>
+  </body>
 </html>

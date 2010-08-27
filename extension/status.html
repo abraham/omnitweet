@@ -1,0 +1,29 @@
+<html>
+<head>
+<link href="css/status.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="lib/twitter-text.js"></script>
+<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="status.js"></script>
+<script type="text/javascript">
+  var parameters = location.search.slice(1).split('=');
+  var statusObj = Status.get(parameters[1]);
+  
+  $(document).ready(function() {
+    
+    $('#statusText').html(TwitterText.auto_link(statusObj.text));
+    $('#screenName').html('<a href="javascript:window.open(\'http://twitter.com/' + statusObj.user.screen_name + '\');window.close();">' + statusObj.user.screen_name + '</a>');
+    $('#profileImage').html('<a href="https://twitter.com/' + statusObj.user.screen_name + '"><img width="48" height="48" src="' + statusObj.user.profile_image_url + '"/></a>');
+    $('a').attr('target', '_blank');
+    
+  });
+</script>
+</head>
+<body>
+  <div id="status">
+    <span id="profileImage"></span>
+    <span id="screenName"></span>
+    <span id="statusText"></span>
+    <span class="actions"></span>
+  </div>
+</body>
+</html>

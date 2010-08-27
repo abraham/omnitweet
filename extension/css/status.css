@@ -1,0 +1,13 @@
+#profileImage {
+ float: left;
+ margin: 0 5px 0 0;
+}
+
+#screenName {
+  font-weight: bold;
+  
+}
+
+#screenName > a:link {
+  text-decoration: none;
+}

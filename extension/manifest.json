@@ -1,9 +1,6 @@
 {
-  // Required
   "name": "__MSG_extName__",
-  "version": "1",
-
-  // Recommended
+  "version": "2",
   "description": "__MSG_extDescription__",
   "icons": { 
     "16": "twitter.png",
@@ -12,8 +9,6 @@
   },
   "default_locale": "en",
   "update_url": "http://github.com/abraham/omnitweet/raw/master/updates.xml",
-
-  // Add any of these that you need
   "background_page": "background.html",
   "minimum_chrome_version": "7",
   "options_page": "options.html",

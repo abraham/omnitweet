@@ -8,7 +8,7 @@ Type "tweet" followed by the message you want posted where you would normally ty
 
 Support
 -------
-If you have any problems or feature requests please [open an issue](http://github.com/abraham/omnitweet) or contact @[abraham](https://twitter.com/abraham).
+If you have any problems or feature requests please [open an issue](http://github.com/abraham/omnitweet/issues) or contact @[abraham](https://twitter.com/abraham).
 
 Developers
 ----------

@@ -1,0 +1,18 @@
+{
+  "extName": {
+    "message": "OmniTweet",
+    "name": "Extension name."
+  },
+  "extDescription": {
+    "message": "Post tweets to Twitter from the OmniBar. Requires Chrome 7+ and a Twitter account. Type \"tweet\" followed by your message.",
+    "name": "Extension description."
+  },
+  "tweetPosted": {
+    "message": "Tweet posted",
+    "Name": "Confirmation of tweet being posted to Twitter."
+  },
+  "verbTweet": {
+    "message": "Tweet",
+    "name": "Tweet used to reference the act of posting a tweet."
+  }
+}

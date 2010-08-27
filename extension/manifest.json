@@ -1,0 +1,28 @@
+{
+  // Required
+  "name": "__MSG_extName__",
+  "version": "1",
+
+  // Recommended
+  "description": "__MSG_extDescription__",
+  "icons": { 
+    "16": "twitter.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "default_locale": "en",
+  "update_url": "http://github.com/abraham/omnitweet/raw/master/updates.xml",
+
+  // Add any of these that you need
+  "background_page": "background.html",
+  "minimum_chrome_version": "7",
+  "options_page": "options.html",
+  "permissions": [
+    "https://api.twitter.com/",
+    "geolocation",
+    "notifications",
+    "tabs",
+    "experimental"
+    ],
+  "omnibox_keyword": "tweet"
+}

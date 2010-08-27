@@ -1,0 +1,160 @@
+<html>
+  <!-- Include OAuth JavaScript files -->
+  <script type="text/javascript" src="chrome_ex_oauthsimple.js"></script>
+  <script type="text/javascript" src="chrome_ex_oauth.js"></script>
+  <script>
+// Is users location currently being updateed.
+var currentLocationRequest = false;
+// Build OAuth stuff.
+var oauth = ChromeExOAuth.initBackgroundPage({
+  request_url: 'https://api.twitter.com/oauth/request_token',
+  authorize_url: 'https://api.twitter.com/oauth/authorize',
+  access_url: 'https://api.twitter.com/oauth/access_token',
+  // Make sure to include consumer key and secret from http://dev.twitter.com/apps.
+  consumer_key: '',
+  consumer_secret: '',
+  scope: '',
+  app_name: 'OmniTweet for Chrome'
+});
+
+// If there is no OAuth user tokens start the OAuth process
+if (!oauth.hasToken()) {
+  oauth.authorize(onAuthorized);
+}
+
+// Get the place locations saved in localStorage. Will get new location if older then 15 min or true included.
+function getLocations(force) {
+  var d = new Date();
+  time = Math.floor(d.getTime() / 1000);
+  // Check if location is old  not existant or forced update.
+  if(force || !localStorage.geo_touched || parseInt(localStorage.geo_touched) + 15 * 60 <= time){
+    updateLocation();
+    return false;
+  }
+  return localStorage.places ? JSON.parse(localStorage.places) : false;
+}
+
+// Get current browser location and exchange for 5 neighborhoods from Twitter.
+function updateLocation() {
+  // Cancel if locations already being fetched.
+  if (currentLocationRequest) {
+    return false;
+  }
+  currentLocationRequest = true;
+  console.log('Updating location');
+  // Get current location from browser.
+  navigator.geolocation.getCurrentPosition(function(position) {
+    if(!position) {
+      return false;
+    }
+    // Set up vars for OAuth call to Twitter
+    var url = 'https://api.twitter.com/1/geo/search.json';
+    var callback = function(data) {
+      if (response = JSON.parse(data)){
+        var places = [];
+        for(var place in response.result.places) {
+          places.push({
+            name: response.result.places[place].name,
+            id: response.result.places[place].id
+          });
+        }
+        // Cache location locally.
+        localStorage.places = JSON.stringify(places);
+        localStorage.latitude = position.coords.latitude;
+        localStorage.longitude = position.coords.longitude;
+        var d = new Date();
+        localStorage.geo_touched = Math.floor(d.getTime() / 1000);
+        currentLocationRequest = false;
+      }
+    };
+    var parameters = {
+      method: 'GET',
+      parameters: {
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+        max_results: 5
+      }
+    };
+    // Make OAuth request to Twitter for places.
+    oauth.sendSignedRequest(url, callback, parameters);
+  });
+}
+
+// User succesfully authorized Twitter
+function onAuthorized() {
+  console.log('Twitter authorization successful!');
+  updateLocation();
+}
+
+// OmniBox selected OmnitTweet so update location.
+chrome.experimental.omnibox.onInputStarted.addListener(
+  function() {
+    getLocations();
+  });
+
+// Suggest locations to user in OmniBox.
+chrome.experimental.omnibox.onInputChanged.addListener(
+  function(text, suggest) {
+    if ('' == text) {
+      return;
+    }
+    var places = getLocations();
+    var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text}];
+    // Only suggets locations if the are available.
+    if(places) {
+      for(var place in places) {
+        suggestions.push({
+          content: JSON.stringify({status: text, place_id: places[place].id}),
+          description: chrome.i18n.getMessage("verbTweet") + " " + text + " from " + places[place].name,
+          descriptionStyles: [
+            chrome.experimental.omnibox.styleMatch(0),
+            chrome.experimental.omnibox.styleNone(6),
+            chrome.experimental.omnibox.styleMatch(text.length + 8)
+          ]
+        });     
+      }
+    }    
+    suggest(suggestions);
+  }
+);
+
+// User hit enter so post tweet.
+chrome.experimental.omnibox.onInputEntered.addListener(
+  function(content) {
+    // Vars for status create call to Twitter.
+    var status;
+    var place_id;
+    var url = 'https://api.twitter.com/1/statuses/update.json';
+    if (content.substring(0, 10) == '{"status":') {
+      content = JSON.parse(content);
+      place_id = content.place_id ? content.place_id : false;
+      status = content.status;
+    } else {
+      status = content;
+    }
+    var callback = function(data) {
+      if (response = JSON.parse(data)){
+        var notification = webkitNotifications.createNotification(
+          response.user.profile_image_url,
+          chrome.i18n.getMessage("tweetPosted"),
+          response.text
+        );
+        notification.show();
+        console.log(chrome.i18n.getMessage("tweetPosted"));
+      }
+    }
+    var parameters = {
+      method: 'POST',
+      parameters: {
+        status: status
+      }
+    }
+    if(content.place_id) { 
+      parameters.parameters.place_id = place_id;
+    }
+    // Make OAuth call to post tweet.
+    oauth.sendSignedRequest(url, callback, parameters);
+  }
+);
+  </script>
+</html>

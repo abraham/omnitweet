@@ -3,6 +3,7 @@
   <!-- Include OAuth JavaScript files -->
   <script type="text/javascript" src="chrome_ex_oauthsimple.js"></script>
   <script type="text/javascript" src="chrome_ex_oauth.js"></script>
+  <script type="text/javascript" src="twitter-text.js"></script>
   <script>
 // Is users location currently being updateed.
 var currentLocationRequest = false;
@@ -113,7 +114,7 @@ chrome.experimental.omnibox.onInputChanged.addListener(
       modifyPageAction(140);
       return;
     }
-    modifyPageAction(140 - text.length);
+    modifyPageAction(140 - countCharacters(text));
     var as = localStorage.screen_name ? ' as @' + localStorage.screen_name : '';
     var places = getLocations();
     var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text + as}];
@@ -180,6 +181,18 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     oauth.sendSignedRequest(url, callback, parameters);
   }
 );
+
+// Count characters and count each URL as 20 characters to match what t.co will be.
+function countCharacters(string) {
+  count = string.length;
+  urls = TwitterText.extract_urls(string);
+  if (urls.length != 0) {
+    for (var url in urls) {
+      count = count + (20 - urls[url].length);
+    }
+  }
+  return count;
+}
 
 // Change the count value of the page action.
 function modifyPageAction(count) {

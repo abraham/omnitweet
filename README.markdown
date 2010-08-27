@@ -2,6 +2,10 @@ OmniTweet for Chrome
 ====================
 Post tweets to Twitter using Google Chrome's address bar.
 
+Installation
+------------
+Make sure you are running Chrome version 7 or higher and that [experimental extensions APIs are enabled](http://code.google.com/chrome/extensions/dev/experimental.html#using) then download the [latest crx file](http://github.com/abraham/omnitweet/downloads).
+
 Requirements
 ------------
 [Google Chrome](http://www.google.com/chrome) or Chromium version 7+ and a Twitter account.

@@ -114,14 +114,15 @@ chrome.experimental.omnibox.onInputChanged.addListener(
       return;
     }
     modifyPageAction(140 - text.length);
+    var as = localStorage.screen_name ? ' as @' + localStorage.screen_name : '';
     var places = getLocations();
-    var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text}];
+    var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text + as}];
     // Only suggets locations if the are available.
     if(places) {
       for(var place in places) {
         suggestions.push({
           content: JSON.stringify({status: text, place_id: places[place].id}),
-          description: chrome.i18n.getMessage("verbTweet") + " " + text + " from " + places[place].name,
+          description: chrome.i18n.getMessage("verbTweet") + " " + text + " from " + places[place].name + as,
           descriptionStyles: [
             chrome.experimental.omnibox.styleMatch(0),
             chrome.experimental.omnibox.styleNone(6),
@@ -157,10 +158,12 @@ chrome.experimental.omnibox.onInputEntered.addListener(
       if (response = JSON.parse(data)){
         var notification = webkitNotifications.createNotification(
           response.user.profile_image_url,
-          chrome.i18n.getMessage("tweetPosted"),
+          '@' + response.user.screen_name,
+          //chrome.i18n.getMessage("tweetPosted"),
           response.text
         );
         notification.show();
+        !localStorage.screen_name ? localStorage.screen_name = response.user.screen_name : false;
         console.log('Tweet posted');
       }
     }

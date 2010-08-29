@@ -4,10 +4,30 @@
 }
 
 #screenName {
-  font-weight: bold;
+  font-weight: bold;  
+}
+
+#screenName > a {
+  text-decoration: none;
+  color: #2276BB;
+}
+
+#screenName > a:hover {
+  text-decoration: underline;
+}
+
+#information {
+  font-size: 12px;
+  float: left;
+  color: #999;
+}
+
+#information > a {
+  text-decoration: none;
+  color: #999;
   
 }
 
-#screenName > a:link {
-  text-decoration: none;
+#information > a:hover {
+  text-decoration: underline;
 }

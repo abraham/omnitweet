@@ -3,27 +3,43 @@
 <link href="css/status.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="lib/twitter-text.js"></script>
 <script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="lib/pretty.js"></script>
 <script type="text/javascript" src="status.js"></script>
 <script type="text/javascript">
   var parameters = location.search.slice(1).split('=');
   var statusObj = Status.get(parameters[1]);
+  var information = '';
   
   $(document).ready(function() {
     
     $('#statusText').html(TwitterText.auto_link(statusObj.text));
-    $('#screenName').html('<a href="javascript:window.open(\'http://twitter.com/' + statusObj.user.screen_name + '\');window.close();">' + statusObj.user.screen_name + '</a>');
+    $('#screenName').html('<a href="http://twitter.com/' + statusObj.user.screen_name + '">' + statusObj.user.screen_name + '</a>');
     $('#profileImage').html('<a href="https://twitter.com/' + statusObj.user.screen_name + '"><img width="48" height="48" src="' + statusObj.user.profile_image_url + '"/></a>');
-    $('a').attr('target', '_blank');
     
+    if (statusObj.user.screen_name == localStorage.screen_name) {
+      information += '<a href="http://twitter.com/' + statusObj.user.screen_name + '/status/' + statusObj.id + '" title="' + statusObj.created_at + '">' + statusObj.created_at + '</a>';
+    }
+    information += ' via ' + statusObj.source;
+    if (statusObj.place) {
+      information += ' from <a href="http://maps.google.com/maps?q=' + statusObj.place.full_name + '" title="' + statusObj.place.full_name + '">' + statusObj.place.full_name + '</a>';
+    }
+
+    $('#information').html(information);
+    $('a').attr('target', '_blank');
+    $("a").prettyDate();
+    setInterval(function(){ $("a").prettyDate(); }, 5000); 
   });
 </script>
 </head>
 <body>
   <div id="status">
     <span id="profileImage"></span>
-    <span id="screenName"></span>
-    <span id="statusText"></span>
-    <span class="actions"></span>
+    <div>
+      <span id="screenName"></span>
+      <span id="statusText"></span>
+    </div>
+    <span id="information"></span>
+    <span id="actions"></span>
   </div>
 </body>
 </html>

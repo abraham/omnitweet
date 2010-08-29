@@ -139,15 +139,15 @@ chrome.experimental.omnibox.onInputChanged.addListener(
 // User hit enter so post tweet.
 chrome.experimental.omnibox.onInputEntered.addListener(
   function(content) {
+    // Vars for updating users status.
+    var status;
+    var place_id;
     // Remove page action if it exists
     if(lastTabID) {
       chrome.pageAction.hide(lastTabID);
       lastTabID = 0;    
     }
-    // Vars for status create call to Twitter.
-    var status;
-    var place_id;
-    var url = 'https://api.twitter.com/1/statuses/update.json';
+    // Check if users hit enter in omnibar or on a dropdown suggestion.
     if (content.substring(0, 10) == '{"status":') {
       content = JSON.parse(content);
       place_id = content.place_id ? content.place_id : false;
@@ -155,27 +155,26 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     } else {
       status = content;
     }
-    // Show a desktop notification when a status is created.
+    // Callback to show a desktop notification when a status is created.
     var callback = function(data) {
-      if (response = JSON.parse(data)){
-        Status.save(response);
-        var notification = webkitNotifications.createHTMLNotification('status.html?id=' + response.id);
+      if (data){
+        Status.save(data);
+        var notification = webkitNotifications.createHTMLNotification('status.html?id=' + data.id);
         notification.show();
-        !localStorage.screen_name ? localStorage.screen_name = response.user.screen_name : false;
-        console.log('Tweet posted');
+        !localStorage.screen_name ? localStorage.screen_name = data.user.screen_name : false;
+        console.log('Tweet posted :)');
       }
     }
+    // Text parameter for new status.
     var parameters = {
-      method: 'POST',
-      parameters: {
         status: status
-      }
     }
+    // Attached place if requested.
     if(content.place_id) { 
-      parameters.parameters.place_id = place_id;
+      parameters.place_id = place_id;
     }
-    // Make OAuth call to post tweet.
-    oauth.sendSignedRequest(url, callback, parameters);
+    // Post status to Twitter.
+    Twitter.post('statuses/update', callback, parameters);
   }
 );
 

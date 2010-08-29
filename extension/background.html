@@ -5,6 +5,7 @@
   <script type="text/javascript" src="lib/chrome_ex_oauth.js"></script>
   <script type="text/javascript" src="lib/twitter-text.js"></script>
   <script type="text/javascript" src="status.js"></script>
+  <script type="text/javascript" src="notice.js"></script>
   <script type="text/javascript" src="twitter.js"></script>
   <script>
 // Is users location currently being updateed.
@@ -157,12 +158,15 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     }
     // Callback to show a desktop notification when a status is created.
     var callback = function(data) {
-      if (data){
+      if (data && !data.error){
         Status.save(data);
         var notification = webkitNotifications.createHTMLNotification('status.html?id=' + data.id);
         notification.show();
         !localStorage.screen_name ? localStorage.screen_name = data.user.screen_name : false;
         console.log('Tweet posted :)');
+      } else {
+        console.log(data);
+        Notice.error('Error updating status:', data.error)
       }
     }
     // Text parameter for new status.

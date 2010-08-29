@@ -1,6 +1,6 @@
 OmniTweet for Chrome
 ====================
-Post tweets to Twitter using Google Chrome's address bar.
+An experimental minimalist Twitter Client for Google Chrome.
 
 Examples
 --------

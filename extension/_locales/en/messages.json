@@ -4,7 +4,7 @@
     "name": "Extension name."
   },
   "extDescription": {
-    "message": "Post tweets to Twitter from the OmniBar. Requires Chrome 7+ and a Twitter account. Type \"tweet\" followed by your message.",
+    "message": "An experimental minimalist Twitter Client for Google Chrome.",
     "name": "Extension description."
   },
   "tweetPosted": {

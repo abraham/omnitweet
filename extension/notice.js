@@ -12,5 +12,11 @@ var Notice = (function ()  {
     notification.show();
   }
 
+  // Show status notice
+  my.status = function(id) {
+    var notification = webkitNotifications.createHTMLNotification('status.html?id=' + id);
+    notification.show();
+  }
+  
   return my;
 }());

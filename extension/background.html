@@ -160,8 +160,7 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     var callback = function(data) {
       if (data && !data.error){
         Status.save(data);
-        var notification = webkitNotifications.createHTMLNotification('status.html?id=' + data.id);
-        notification.show();
+        Notice.status(data.id);
         !localStorage.screen_name ? localStorage.screen_name = data.user.screen_name : false;
         console.log('Tweet posted :)');
       } else {

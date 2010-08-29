@@ -1,6 +1,6 @@
 {
   "name": "__MSG_extName__",
-  "version": "4",
+  "version": "5",
   "description": "__MSG_extDescription__",
   "icons": { 
     "16": "twitter.png",

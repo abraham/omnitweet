@@ -5,6 +5,7 @@
   <script type="text/javascript" src="lib/chrome_ex_oauth.js"></script>
   <script type="text/javascript" src="lib/twitter-text.js"></script>
   <script type="text/javascript" src="status.js"></script>
+  <script type="text/javascript" src="twitter.js"></script>
   <script>
 // Is users location currently being updateed.
 var currentLocationRequest = false;
@@ -51,15 +52,14 @@ function updateLocation() {
     if(!position) {
       return false;
     }
-    // Set up vars for OAuth call to Twitter
-    var url = 'https://api.twitter.com/1/geo/search.json';
+    // Callback for places request
     var callback = function(data) {
-      if (response = JSON.parse(data)){
+      if (!data.error && data.result.places.length){
         var places = [];
-        for(var place in response.result.places) {
+        for(var place in data.result.places) {
           places.push({
-            name: response.result.places[place].name,
-            id: response.result.places[place].id
+            name: data.result.places[place].name,
+            id: data.result.places[place].id
           });
         }
         // Cache location locally.
@@ -70,17 +70,16 @@ function updateLocation() {
         localStorage.geo_touched = Math.floor(d.getTime() / 1000);
         currentLocationRequest = false;
       }
+      console.log('Location updated :)');
     };
+    // Location parameters
     var parameters = {
-      method: 'GET',
-      parameters: {
-        lat: position.coords.latitude,
-        long: position.coords.longitude,
-        max_results: 5
-      }
+      lat: position.coords.latitude,
+      long: position.coords.longitude,
+      max_results: 5
     };
     // Make OAuth request to Twitter for places.
-    oauth.sendSignedRequest(url, callback, parameters);
+    Twitter.get('geo/search', callback, parameters);
   });
 }
 

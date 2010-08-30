@@ -1,10 +1,10 @@
 <html>
 <head>
-<link href="css/status.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="lib/twitter-text.js"></script>
-<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="lib/pretty.js"></script>
-<script type="text/javascript" src="status.js"></script>
+<link href="stylesheets/status.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="libraries/twitter-text.js"></script>
+<script type="text/javascript" src="libraries/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="libraries/pretty.js"></script>
+<script type="text/javascript" src="javascript/status.js"></script>
 <script type="text/javascript">
   var parameters = location.search.slice(1).split('=');
   var statusObj = Status.get(parameters[1]);
@@ -41,8 +41,12 @@
         <span id="screenName"></span>
         <span id="statusText"></span>
       </div>
-      <span id="information"></span>
-      <span id="actions"></span>
+      <div>
+        <span id="information"></span>
+      </div>
+      <div>
+        <span id="actions"></span>
+      </div>
     </div>
   </div>
 </body>

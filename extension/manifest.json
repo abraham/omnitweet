@@ -3,12 +3,12 @@
   "version": "5",
   "description": "__MSG_extDescription__",
   "icons": { 
-    "16": "twitter.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "images/twitter.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
   },
   "page_action": {
-    "default_icon": "twitter.png",
+    "default_icon": "images/twitter.png",
     "default_title": "__MSG_availableCharacters__"
   },
   "default_locale": "en",

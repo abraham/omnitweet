@@ -54,13 +54,13 @@ function updateLocation() {
       return false;
     }
     // Callback for places request
-    var callback = function(data) {
-      if (!data.error && data.result.places.length){
+    var callback = function(result) {
+      if (200 == result.status && result.data.result.places.length){
         var places = [];
-        for(var place in data.result.places) {
+        for(var place in result.data.result.places) {
           places.push({
-            name: data.result.places[place].name,
-            id: data.result.places[place].id
+            name: result.data.result.places[place].name,
+            id: result.data.result.places[place].id
           });
         }
         // Cache location locally.
@@ -157,15 +157,14 @@ chrome.experimental.omnibox.onInputEntered.addListener(
       status = content;
     }
     // Callback to show a desktop notification when a status is created.
-    var callback = function(data) {
-      if (data && !data.error){
-        Status.save(data);
-        Notice.status(data.id);
-        !localStorage.screen_name ? localStorage.screen_name = data.user.screen_name : false;
+    var callback = function(result) {
+      if (200 == result.status){
+        Status.save(result.data);
+        Notice.status(result.data.id);
+        !localStorage.screen_name ? localStorage.screen_name = result.data.user.screen_name : false;
         console.log('Tweet posted :)');
       } else {
-        console.log(data);
-        Notice.error('Error updating status:', data.error)
+        Notice.error('Oops... something went wrong', result.data.error)
       }
     }
     // Text parameter for new status.

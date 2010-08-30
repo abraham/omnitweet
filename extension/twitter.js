@@ -20,7 +20,12 @@ var Twitter = (function ()  {
     }
     // Decode the JSON response.
     var callbackWrapper = function(data, xhr) {
-      callback(JSON.parse(data));
+      
+      if (xhr.status != 200 && xhr.status >= 500) {
+        callback({data: data, status: xhr.status})
+      } else {
+        callback({data:JSON.parse(data), status: xhr.status});
+      }
     }
     oauth.sendSignedRequest(my.buildUrl(path), callbackWrapper, parameters);
   }

@@ -17,8 +17,8 @@ var oauth = ChromeExOAuth.initBackgroundPage({
   authorize_url: 'https://api.twitter.com/oauth/authorize',
   access_url: 'https://api.twitter.com/oauth/access_token',
   // Make sure to include consumer key and secret from http://dev.twitter.com/apps.
-  consumer_key: '',
-  consumer_secret: '',
+  consumer_key: 'tYldpeWyIfqlSJ8poz0KMA',
+  consumer_secret: 'faJFxxKKg8e1qTIl1pUJEiHqsL7FCNMtDoU9G8HjOU',
   scope: '',
   app_name: 'OmniTweet for Chrome'
 });
@@ -69,8 +69,10 @@ function updateLocation() {
         localStorage.longitude = position.coords.longitude;
         var d = new Date();
         localStorage.geo_touched = Math.floor(d.getTime() / 1000);
-        currentLocationRequest = false;
+      } else {
+        infoBar();
       }
+      currentLocationRequest = false;
       console.log('Location updated :)');
     };
     // Location parameters
@@ -198,6 +200,13 @@ function modifyPageAction(count) {
     lastTabID = tab.id;
     chrome.pageAction.show(lastTabID);
     chrome.pageAction.setIcon({imageData: drawCount(count), tabId: lastTabID});
+  });
+}
+
+function infoBar(text) {
+  chrome.tabs.getSelected(null, function(tab) {
+    lastInfoBarTabID = tab.id;
+    chrome.experimental.infobars.show({tabId: lastInfoBarTabID, path: 'infobar.html?text=' + text}, function(window){console.log(window)});
   });
 }
 

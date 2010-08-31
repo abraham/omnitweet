@@ -9,7 +9,6 @@ var Status = (function ()  {
   
   // Get the status object matching the id
   my.get = function(id) {
-    console.log(typeof JSON.parse(localStorage['status_' + id]))
     return JSON.parse(localStorage['status_' + id]);
   }
   

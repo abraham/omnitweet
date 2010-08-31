@@ -13,7 +13,7 @@ var Poll = (function ()  {
   
   // Get the status object matching the id
   my.reset = function() {
-    my.frequency = my.frequency == localStorage.poll_frequency? my.frequency : localStorage.poll_frequency;
+    my.frequency = localStorage.poll_frequency && parseInt(localStorage.poll_frequency) >= 1? parseInt(localStorage.poll_frequency) : 3;
     window.setTimeout('Poll.start();', Poll.frequency * 60 * 1000);
   }
   

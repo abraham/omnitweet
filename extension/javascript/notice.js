@@ -5,7 +5,7 @@ var Notice = (function ()  {
   // Show error notice.
   my.error = function(type, text){
     var notification = webkitNotifications.createNotification(
-      'error.png',
+      'images/error.png',
       type,
       text
     );

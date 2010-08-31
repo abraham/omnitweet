@@ -25,11 +25,6 @@ var oauth = ChromeExOAuth.initBackgroundPage({
   app_name: 'OmniTweet for Chrome'
 });
 
-// If there is no OAuth user tokens start the OAuth process
-if (!oauth.hasToken()) {
-  oauth.authorize(onAuthorized);
-}
-
 // Get the place locations saved in localStorage. Will get new location if older then 15 min or true included.
 function getLocations(force) {
   var d = new Date();
@@ -95,6 +90,7 @@ function updateLocation() {
 function onAuthorized() {
   console.log('Twitter authorization successful!');
   updateLocation();
+  Poll.start();
 }
 
 // OmniBox selected OmnitTweet so update location.
@@ -234,7 +230,12 @@ function drawCount(count) {
 }
 
 function init() {
-  Poll.start();
+  // If there is no OAuth user tokens start the OAuth process
+  if (!oauth.hasToken()) {
+    oauth.authorize(onAuthorized);
+  } else {
+    Poll.start();
+  }
 }
 
 init();

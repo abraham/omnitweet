@@ -5,8 +5,10 @@
   <script type="text/javascript" src="libraries/chrome_ex_oauth.js"></script>
   <script type="text/javascript" src="libraries/twitter-text.js"></script>
   <script type="text/javascript" src="javascript/status.js"></script>
+  <script type="text/javascript" src="javascript/direct_message.js"></script>
   <script type="text/javascript" src="javascript/notice.js"></script>
   <script type="text/javascript" src="javascript/twitter.js"></script>
+  <script type="text/javascript" src="javascript/poll.js"></script>
   <script>
 // Is users location currently being updateed.
 var currentLocationRequest = false;
@@ -230,6 +232,12 @@ function drawCount(count) {
   context.fillText(count, 9.5, 10);
   return context.getImageData(0, 0, 19, 19);
 }
+
+function init() {
+  Poll.start();
+}
+
+init();
   </script>
   </head>
   <body>

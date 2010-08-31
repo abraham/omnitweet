@@ -27,6 +27,9 @@ var oauth = ChromeExOAuth.initBackgroundPage({
 
 // Get the place locations saved in localStorage. Will get new location if older then 15 min or true included.
 function getLocations(force) {
+  if (localStorage.geo_enabled == 'disabled') {
+    return false;
+  }
   var d = new Date();
   time = Math.floor(d.getTime() / 1000);
   // Check if location is old  not existant or forced update.
@@ -40,7 +43,7 @@ function getLocations(force) {
 // Get current browser location and exchange for 5 neighborhoods from Twitter.
 function updateLocation() {
   // Cancel if locations already being fetched.
-  if (currentLocationRequest) {
+  if (currentLocationRequest || localStorage.geo_enabled == 'disabled') {
     return false;
   }
   currentLocationRequest = true;

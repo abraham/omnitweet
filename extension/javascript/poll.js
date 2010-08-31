@@ -7,6 +7,7 @@ var Poll = (function ()  {
   // Start polling for 
   my.start = function(){
     Twitter.mentions();
+    Twitter.direct_messages();
     my.reset();
   }
   

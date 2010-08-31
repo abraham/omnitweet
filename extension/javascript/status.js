@@ -4,7 +4,7 @@ var Status = (function ()  {
   
   // Save a status object to localStorage
   my.save = function(status){
-  return localStorage['status_' + status.id] = JSON.stringify(status);
+    return localStorage['status_' + status.id] = JSON.stringify(status);
   }
   
   // Get the status object matching the id
@@ -12,5 +12,6 @@ var Status = (function ()  {
     console.log(typeof JSON.parse(localStorage['status_' + id]))
     return JSON.parse(localStorage['status_' + id]);
   }
+  
   return my;
 }());

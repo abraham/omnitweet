@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>OmniTweet for Google Chrome - Options</title>
+<link href="stylesheets/options.css" rel="stylesheet" type="text/css">
+<!-- Options page heavily based on the Google Voice options page. -->
+</head>
+<body>
+
+<div id="header"><h1>OmniTweet for Google Chrome Options</h1></div>
+
+<form name="omnitweet">
+<div class="settings-content">
+  <table class="settings-table" id="settings-voicemail-content">
+    <tr>
+      <th class="left"></th>
+      <td class="right"><div id="flash"></div></td>
+    <tr>
+      <th class="left">Add account</th>
+      <td class="right">
+        <img id="sign-in-image" src="images/sign-in-with-twitter.png" alt="Sign in with Twitter"  />
+      </td>
+    </tr>
+    <tr>
+      <th class="left">Poll frequency</th>
+      <td class="right">
+        <input type="textbox" id="poll_frequency" value="3" size="1" maxlength="2" onblur="save('poll_frequency', 'textbox');"/>
+        <label for="poll_frequency">How many minutes to wait between checking for new mentions and direct messages?</label><br/>
+      </td>
+    </tr>
+    <tr>
+      <th class="left">Check for mentions</th>
+      <td class="right">
+        <input id="poll_for_mentions" type="checkbox" disabled="true"/>
+        <label for="poll_for_mentions">Periodically poll Twitter for new mentions.</label>
+      </td>
+    </tr>
+    <tr>
+      <th class="left">Check for direct messages</th>
+      <td class="right">
+        <input id="poll_for_direct_messages" type="checkbox" disabled="true"/>
+        <label for="poll_for_direct_messages">Periodically poll Twitter for new direct messages.</label>
+      </td>
+    </tr>
+    <tr>
+      <th class="left">Enable location</th>
+      <td class="right">
+        <input id="geo_enabled" type="checkbox" onchange="save('geo_enabled');" disabled="true"/>
+        <label for="geo_enabled">Send your location to Twitter to find nearby places and offer to attach a place to new tweets.</label>
+      </td>
+    </tr>
+    <tr>
+      <th class="left">Clear saved options</th>
+      <td class="right">
+        <button onclick="clearData()">Clear</button>
+      </td>
+    </tr>
+  </table>
+</div>
+</form>
+
+<div id="footer">
+   <a href="http://github.com/abraham/omnitweet">OmnitTweet</a> - 
+   <a href="http://abrah.am">Abraham Williams</a> - 
+   <span class="at_symbol">@</span><a href="https://twitter.com/abraham">abraham</a> - 
+   <a href="http://twitter.com">Twitter</a> -
+   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://github.com/abraham/omnitweet" data-counturl="http://github.com/abraham/omnitweet" data-text="OmniTweet: An experimental minimalist Twitter Client for Google Chrome -" data-count="horizontal" data-via="abraham">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+</div>
+
+<script>
+var poll_frequency;
+var poll_for_mentions;
+var poll_for_direct_messages;
+var geo_enabled;
+var default_options = {poll_frequency: 3, poll_for_mentions: true, poll_for_direct_messages: true, geo_enabled: true};
+var default_options_name = {poll_frequency: 'Poll frequency', poll_for_mentions: 'Check for mentions', poll_for_direct_messages: 'Check for direct messages', geo_enabled: 'Location'};
+
+init();
+
+function init() {
+  poll_frequency = document.omnitweet.poll_frequency;
+  poll_frequency = document.getElementById('poll_frequency');
+  poll_frequency.value = localStorage.poll_frequency ? localStorage.poll_frequency : default_options.poll_frequency;
+
+  poll_for_mentions = document.getElementById('poll_for_mentions');
+  //poll_for_mentions.checked = localStorage.poll_for_mentions ? false : default_options.poll_for_mentions;
+
+  poll_for_direct_messages = document.getElementById('poll_for_direct_messages');
+  //poll_for_direct_messages.checked = localStorage.poll_for_direct_messages ? false : default_options.poll_for_direct_messages;
+  
+  geo_enabled = document.getElementById('geo_enabled');
+  geo_enabled.checked = localStorage.geo_enabled == null ? default_options.geo_enabled : localStorage.geo_enabled;
+  
+  account = document.getElementById('account');
+  //account.value = localStorage['account'] ? false : true;
+}
+
+function save(id, type) {
+  switch(type) {
+    case 'textbox':
+      localStorage[id] = document.getElementById(id).value ? document.getElementById(id).value : default_options[id];
+      break;
+    default:
+      console.log('default')
+      localStorage[id] = document.getElementById(id).checked ? true : false;     
+  }
+  flash(default_options_name[id] + ' option saved.');
+}
+
+function flash(text) {
+  var status = document.getElementById("flash");
+  status.innerHTML = '<b>' + text + '</b>';
+  setTimeout(function() {
+    status.innerHTML = "";
+  }, 10000);
+}
+
+function clearData() {
+  if (confirm('Clear all saved options and information?')) {
+    localStorage.clear();
+    flash('Options and saved information cleared.');
+  }
+}
+
+</script>
+</body>
+</html>

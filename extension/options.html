@@ -2,7 +2,7 @@
 <head>
 <title>OmniTweet for Google Chrome - Options</title>
 <link href="stylesheets/options.css" rel="stylesheet" type="text/css">
-<!-- Options page heavily based on the Google Voice options page. -->
+<!-- Options page heavily based on the Google Voice extension options page. -->
 </head>
 <body>
 
@@ -30,14 +30,14 @@
     <tr>
       <th class="left">Check for mentions</th>
       <td class="right">
-        <input id="poll_for_mentions" type="checkbox" disabled="true"/>
+        <input id="poll_for_mentions" type="checkbox" onchange="save('poll_for_mentions');" disabled="true"/>
         <label for="poll_for_mentions">Periodically poll Twitter for new mentions.</label>
       </td>
     </tr>
     <tr>
       <th class="left">Check for direct messages</th>
       <td class="right">
-        <input id="poll_for_direct_messages" type="checkbox" disabled="true"/>
+        <input id="poll_for_direct_messages" type="checkbox" onchange="save('poll_for_direct_messages');" disabled="true"/>
         <label for="poll_for_direct_messages">Periodically poll Twitter for new direct messages.</label>
       </td>
     </tr>

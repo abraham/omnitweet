@@ -55,6 +55,7 @@ function updateLocation() {
     }
     // Callback for places request
     var callback = function(result) {
+      var d = new Date();
       if (200 == result.status && result.data.result.places.length){
         var places = [];
         for(var place in result.data.result.places) {
@@ -67,11 +68,13 @@ function updateLocation() {
         localStorage.places = JSON.stringify(places);
         localStorage.latitude = position.coords.latitude;
         localStorage.longitude = position.coords.longitude;
-        var d = new Date();
-        localStorage.geo_touched = Math.floor(d.getTime() / 1000);
       } else {
-        infoBar();
+        time = Math.floor(d.getTime() / 1000);
+        if(!localStorage.geo_touched || parseInt(localStorage.geo_touched) + 15 * 60 <= time){
+          infoBar();
+        }
       }
+      localStorage.geo_touched = Math.floor(d.getTime() / 1000);
       currentLocationRequest = false;
       console.log('Location updated :)');
     };

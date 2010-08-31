@@ -30,21 +30,21 @@
     <tr>
       <th class="left">Check for mentions</th>
       <td class="right">
-        <input id="poll_for_mentions" type="checkbox" onchange="save('poll_for_mentions');" disabled="true"/>
+        <input id="poll_for_mentions" type="checkbox" onchange="save('poll_for_mentions');" />
         <label for="poll_for_mentions">Periodically poll Twitter for new mentions.</label>
       </td>
     </tr>
     <tr>
       <th class="left">Check for direct messages</th>
       <td class="right">
-        <input id="poll_for_direct_messages" type="checkbox" onchange="save('poll_for_direct_messages');" disabled="true"/>
+        <input id="poll_for_direct_messages" type="checkbox" onchange="save('poll_for_direct_messages');" />
         <label for="poll_for_direct_messages">Periodically poll Twitter for new direct messages.</label>
       </td>
     </tr>
     <tr>
       <th class="left">Enable location</th>
       <td class="right">
-        <input id="geo_enabled" type="checkbox" onchange="save('geo_enabled');" disabled="true"/>
+        <input id="geo_enabled" type="checkbox" onchange="save('geo_enabled');" />
         <label for="geo_enabled">Send your location to Twitter to find nearby places and offer to attach a place to new tweets.</label>
       </td>
     </tr>
@@ -71,7 +71,7 @@ var poll_frequency;
 var poll_for_mentions;
 var poll_for_direct_messages;
 var geo_enabled;
-var default_options = {poll_frequency: 3, poll_for_mentions: true, poll_for_direct_messages: true, geo_enabled: true};
+var default_options = {poll_frequency: 3, poll_for_mentions: 'enabled', poll_for_direct_messages: 'enabled', geo_enabled: 'enabled'};
 var default_options_name = {poll_frequency: 'Poll frequency', poll_for_mentions: 'Check for mentions', poll_for_direct_messages: 'Check for direct messages', geo_enabled: 'Location'};
 
 init();
@@ -82,14 +82,14 @@ function init() {
   poll_frequency.value = localStorage.poll_frequency ? localStorage.poll_frequency : default_options.poll_frequency;
 
   poll_for_mentions = document.getElementById('poll_for_mentions');
-  //poll_for_mentions.checked = localStorage.poll_for_mentions ? false : default_options.poll_for_mentions;
+  poll_for_mentions.checked = localStorage.poll_for_mentions != 'disabled'? true : false;
 
   poll_for_direct_messages = document.getElementById('poll_for_direct_messages');
-  //poll_for_direct_messages.checked = localStorage.poll_for_direct_messages ? false : default_options.poll_for_direct_messages;
+  poll_for_direct_messages.checked = localStorage.poll_for_direct_messages != 'disabled'? true : false;
   
   geo_enabled = document.getElementById('geo_enabled');
-  geo_enabled.checked = localStorage.geo_enabled == null ? default_options.geo_enabled : localStorage.geo_enabled;
-  
+  geo_enabled.checked = localStorage.geo_enabled != 'disabled'? true : false;
+ 
   account = document.getElementById('account');
   //account.value = localStorage['account'] ? false : true;
 }
@@ -100,8 +100,7 @@ function save(id, type) {
       localStorage[id] = document.getElementById(id).value ? document.getElementById(id).value : default_options[id];
       break;
     default:
-      console.log('default')
-      localStorage[id] = document.getElementById(id).checked ? true : false;     
+      localStorage[id] = document.getElementById(id).checked ?  'enabled': 'disabled';
   }
   flash(default_options_name[id] + ' option saved.');
 }

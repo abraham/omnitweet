@@ -18,5 +18,11 @@ var Notice = (function ()  {
     notification.show();
   }
   
+  // Show direct message notice
+  my.direct_message = function(id) {
+    var notification = webkitNotifications.createHTMLNotification('direct_message.html?id=' + id);
+    notification.show();
+  }
+  
   return my;
 }());

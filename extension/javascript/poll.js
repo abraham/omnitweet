@@ -6,8 +6,12 @@ var Poll = (function ()  {
   
   // Start polling for 
   my.start = function(){
-    Twitter.mentions();
-    Twitter.direct_messages();
+    if (localStorage.poll_for_mentions != 'disabled') {
+      Twitter.mentions();
+    }
+    if (localStorage.poll_for_direct_messages != 'disabled') {
+      Twitter.direct_messages();
+    }
     my.reset();
   }
   

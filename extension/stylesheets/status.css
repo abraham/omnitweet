@@ -17,17 +17,23 @@
 }
 
 #information {
-  font-size: 12px;
   float: left;
+}
+
+#actions {
+  float: right;
+}
+.link {
+  font-size: 12px;
   color: #999;
 }
 
-#information > a {
+.link > a {
   text-decoration: none;
   color: #999;
   
 }
 
-#information > a:hover {
+.link > a:hover {
   text-decoration: underline;
 }

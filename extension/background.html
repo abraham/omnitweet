@@ -89,13 +89,6 @@ function updateLocation() {
   });
 }
 
-// User succesfully authorized Twitter
-function onAuthorized() {
-  console.log('Twitter authorization successful!');
-  updateLocation();
-  Poll.start();
-}
-
 // OmniBox selected OmnitTweet so update location.
 chrome.experimental.omnibox.onInputStarted.addListener(
   function() {
@@ -232,10 +225,30 @@ function drawCount(count) {
   return context.getImageData(0, 0, 19, 19);
 }
 
+function install() {
+  Twitter.verify_credentials({install: true});
+  Twitter.direct_messages({silent: true});
+  Twitter.mentions({silent: true});
+  updateLocation();
+  localStorage.installed = 'true';
+  Poll.start();
+  console.log('OmiTweet installed successfully!');
+}
+
+chrome.extension.onRequest.addListener(
+  function(request, sender, sendResponse) {
+    switch (request.action){
+      case 'install':
+        install();
+      case 'oauth':
+        oauth.authorize(install);
+    }
+  }
+);
+
 function init() {
-  // If there is no OAuth user tokens start the OAuth process
-  if (!oauth.hasToken()) {
-    oauth.authorize(onAuthorized);
+  if (localStorage.installed != 'true') {
+    oauth.authorize(install);
   } else {
     Poll.start();
   }

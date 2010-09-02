@@ -15,9 +15,9 @@
       <th class="left"></th>
       <td class="right"><div id="flash"></div></td>
     <tr>
-      <th class="left">Add account</th>
+      <th class="left">Account</th>
       <td class="right">
-        <img id="sign-in-image" src="images/sign-in-with-twitter.png" alt="Sign in with Twitter"  />
+        <div id='account'><a href='' onClick='sendInstallMsg();'><img id="sign-in-image" src="images/sign-in-with-twitter.png" alt="Sign in with Twitter"  /></a></div>
       </td>
     </tr>
     <tr>
@@ -80,18 +80,21 @@ function init() {
   poll_frequency = document.omnitweet.poll_frequency;
   poll_frequency = document.getElementById('poll_frequency');
   poll_frequency.value = localStorage.poll_frequency ? localStorage.poll_frequency : default_options.poll_frequency;
-
   poll_for_mentions = document.getElementById('poll_for_mentions');
   poll_for_mentions.checked = localStorage.poll_for_mentions != 'disabled'? true : false;
-
   poll_for_direct_messages = document.getElementById('poll_for_direct_messages');
   poll_for_direct_messages.checked = localStorage.poll_for_direct_messages != 'disabled'? true : false;
-  
   geo_enabled = document.getElementById('geo_enabled');
   geo_enabled.checked = localStorage.geo_enabled != 'disabled'? true : false;
- 
+  if (localStorage.installed) {
+    showUser();
+  }
+}
+
+function showUser() {
   account = document.getElementById('account');
-  //account.value = localStorage['account'] ? false : true;
+  var user = JSON.parse(localStorage.user)
+  account.innerHTML = '<span class="at_symbol">@</span><a href="https://twitter.com/' + user.screen_name + '">' + user.screen_name + '</a>';
 }
 
 function save(id, type) {
@@ -118,6 +121,14 @@ function clearData() {
     localStorage.clear();
     flash('Options and saved information cleared.');
   }
+}
+function sendInstallMsg() {
+  chrome.extension.sendRequest({action: 'oauth'}, function(response) {
+      if (response.action == 'show') {
+        showUser();
+      }
+    }
+  );
 }
 
 </script>

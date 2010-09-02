@@ -1,10 +1,10 @@
 // Make requests to Twitter
 var Twitter = (function ()  {
   var my = {};
-  my.current_requests = {mentions: false, direct_messages: false};
+  my.current_requests = {mentions: false, direct_messages: false, verify_credentials: false};
 
   // Get mentions
-  my.mentions = function(init) {
+  my.mentions = function(options) {
     if (my.current_requests.mentions) {
       return false;
     }
@@ -13,7 +13,9 @@ var Twitter = (function ()  {
         localStorage.statuses_last_id = result.data[0].id;
         for(var status in result.data) {
           Status.save(result.data[status]);
-          Notice.status(result.data[status].id);
+          if (options && options.silent != true) {
+            Notice.status(result.data[status].id);
+          }
         }
       }
       my.current_requests.mentions = false;
@@ -28,7 +30,7 @@ var Twitter = (function ()  {
   }
   
   // Get direct messages
-  my.direct_messages = function(init) {
+  my.direct_messages = function(options) {
     if (my.current_requests.direct_messages) {
       return false;
     }
@@ -37,7 +39,9 @@ var Twitter = (function ()  {
         localStorage.direct_messages_last_id = result.data[0].id;
         for(var direct_messages in result.data) {
           DirectMessage.save(result.data[direct_messages]);
-          Notice.direct_message(result.data[direct_messages].id);
+          if (options && options.silent != true) {
+            Notice.direct_message(result.data[direct_messages].id);
+          }
         }
       }
       my.current_requests.direct_messages = false;
@@ -49,6 +53,23 @@ var Twitter = (function ()  {
     }
     // Make request to Twitter for direct messages.
     Twitter.get('direct_messages', callback, parameters);
+  }
+  
+  // Verify users account credentials
+  my.verify_credentials = function(options) {
+    if (my.current_requests.verify_credentials) {
+      return false;
+    }   var callback = function(result) {
+      if (200 == result.status && result.data){
+        localStorage.user = JSON.stringify(result.data);
+        d = new Date();
+        localStorage.user_touched = Math.floor(d.getTime() / 1000);
+      }
+      my.current_requests.verify_credentials = false;
+      console.log('Verified account credentials :)');
+    };
+    // Make request to Twitter for direct messages.
+    Twitter.get('account/verify_credentials', callback);
   }
   
   // Make a GET request.

@@ -13,10 +13,10 @@
   
   $(document).ready(function() {
     $('#statusText').html(TwitterText.auto_link(statusObj.text));
-    $('#screenName').html('<a href="http://twitter.com/' + statusObj.user.screen_name + '">' + statusObj.user.screen_name + '</a>');
+    $('#screenName').html('<a href="https://twitter.com/' + statusObj.user.screen_name + '">' + statusObj.user.screen_name + '</a>');
     $('#profileImage').html('<a href="https://twitter.com/' + statusObj.user.screen_name + '"><img width="48" height="48" src="' + statusObj.user.profile_image_url + '"/></a>');
     
-      information += '<a href="http://twitter.com/' + statusObj.user.screen_name + '/status/' + statusObj.id + '" title="' + statusObj.created_at + '">' + statusObj.created_at + '</a>';
+      information += '<a href="https://twitter.com/' + statusObj.user.screen_name + '/status/' + statusObj.id + '" title="' + statusObj.created_at + '">' + statusObj.created_at + '</a>';
     information += ' via ' + statusObj.source;
     if (statusObj.place) {
       information += ' from <a href="http://maps.google.com/maps?q=' + statusObj.place.full_name + '" title="' + statusObj.place.full_name + '">' + statusObj.place.full_name + '</a>';

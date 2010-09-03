@@ -9,18 +9,21 @@
   var parameters = location.search.slice(1).split('=');
   var DirectMessageObj = DirectMessage.get(parameters[1]);
   var information = '';
+  var actions = '';
   
   $(document).ready(function() {
     
-    $('#statusText').html(TwitterText.auto_link(DirectMessageObj.text));
+    $('#icon').html('<img src="images/message.png" alt="Direct Message" title="Direct Message"/>');
     $('#screenName').html('<a href="http://twitter.com/' + DirectMessageObj.sender_screen_name + '">' + DirectMessageObj.sender_screen_name + '</a>');
+    $('#statusText').html(TwitterText.auto_link(DirectMessageObj.text));
     $('#profileImage').html('<a href="https://twitter.com/' + DirectMessageObj.sender_screen_name + '"><img width="48" height="48" src="' + DirectMessageObj.sender.profile_image_url + '"/></a>');
     
     information += '<a href="https://twitter.com/inbox" title="' + DirectMessageObj.created_at + '">' + DirectMessageObj.created_at + '</a>';
-    information += ' <a href="https://twitter.com/inbox" title="Inbox">Inbox</a> ';
-    information += ' <a href="https://twitter.com/direct_messages/create/' + DirectMessageObj.sender_screen_name + '" title="Reply to ' + DirectMessageObj.sender_screen_name + '">Reply</a>';
+    actions += ' <a href="https://twitter.com/inbox" title="Inbox">Inbox</a> ';
+    actions += ' <a href="https://twitter.com/direct_messages/create/' + DirectMessageObj.sender_screen_name + '" title="Reply to ' + DirectMessageObj.sender_screen_name + '">Reply</a>';
 
     $('#information').html(information);
+    $('#actions').html(actions);
     $('a').attr('target', '_blank');
     $("a").prettyDate();
     setInterval(function(){ $("a").prettyDate(); }, 5000); 
@@ -34,14 +37,15 @@
     </div>
     <div>
       <div>
+        <span id="icon"></span>
         <span id="screenName"></span>
         <span id="statusText"></span>
       </div>
       <div>
-        <span id="information"></span>
+        <span class="link"id="information"></span>
       </div>
       <div>
-        <span id="actions"></span>
+        <span class="link" id="actions"></span>
       </div>
     </div>
   </div>

@@ -23,6 +23,12 @@
 #actions {
   float: right;
 }
+
+#icon {
+  position: relative;
+  top: 3px;
+}
+
 .link {
   font-size: 12px;
   color: #999;

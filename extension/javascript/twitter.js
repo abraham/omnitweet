@@ -70,6 +70,9 @@ var Twitter = (function ()  {
         localStorage.user = JSON.stringify(result.data);
         d = new Date();
         localStorage.user_touched = Math.floor(d.getTime() / 1000);
+        if (Location.enabled && !result.data.geo_enabled) {
+          Notice.show_info_bar('Location is currently disabled in your <a target="_blank" href="https://twitter.com/settings/account">Twitter settings</a>. If you would like to use location features be sure to enable it.')
+        }
       }
       my.current_requests.verify_credentials = false;
       console.log('Verified account credentials :)');

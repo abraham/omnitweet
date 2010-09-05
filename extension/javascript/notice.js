@@ -67,10 +67,10 @@ var Notice = (function ()  {
     }
   }
 
-  my.show_info_bar = function(text) {
+  my.show_info_bar = function(message) {
+    localStorage.info_bar_message = message;
     chrome.tabs.getSelected(null, function(tab) {
       my.last_id.info_bar = tab.id;
-      localStorage.info_bar_message = text;
       chrome.experimental.infobars.show({tabId: tab.id, path: 'infobar.html'});
     });
   }

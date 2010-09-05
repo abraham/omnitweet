@@ -93,7 +93,7 @@ chrome.experimental.omnibox.onInputEntered.addListener(
 function infoBar(text) {
   chrome.tabs.getSelected(null, function(tab) {
     lastInfoBarTabID = tab.id;
-    chrome.experimental.infobars.show({tabId: lastInfoBarTabID, path: 'infobar.html?text=' + text}, function(window){console.log(window)});
+    chrome.experimental.infobars.show({tabId: lastInfoBarTabID, path: 'infobar.html?text=' + text});
   });
 }
 

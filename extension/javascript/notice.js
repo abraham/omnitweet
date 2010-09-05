@@ -59,12 +59,19 @@ var Notice = (function ()  {
       chrome.pageAction.setIcon({imageData: Notice.count(count), tabId: tab.id});
     });
   }
-  
+
   my.hide_page_action = function() {
     if (my.last_id.page_action) {
       chrome.pageAction.hide(my.last_id.page_action);
+      my.last_id.page_action = 0;
     }
   }
 
+  my.show_info_bar = function(text) {
+    chrome.tabs.getSelected(null, function(tab) {
+      my.last_id.info_bar = tab.id;
+      chrome.experimental.infobars.show({tabId: tab.id, path: 'infobar.html?text=' + text});
+    });
+  }
   return my;
 }());

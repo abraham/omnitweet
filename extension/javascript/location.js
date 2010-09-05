@@ -62,7 +62,7 @@ var Location = (function ()  {
         } else {
           // Notify user of failure to update location. But not too often.
           if(my.stale()){
-            infoBar();
+            Notice.show_info_bar();
           }
         }
         currentLocationRequest = false;

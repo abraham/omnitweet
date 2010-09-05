@@ -77,7 +77,7 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     var place_id;
     // Remove page action if it exists
     Notice.hide_page_action();
-    // Check if users hit enter in omnibar or on a dropdown suggestion.
+    // Check if user hit enter in omnibox or on a dropdown suggestion.
     if (content.substring(0, 10) == '{"status":') {
       content = JSON.parse(content);
       place_id = content.place_id ? content.place_id : false;
@@ -89,13 +89,6 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     Twitter.update(status, {place_id: place_id});
   }
 );
-
-function infoBar(text) {
-  chrome.tabs.getSelected(null, function(tab) {
-    lastInfoBarTabID = tab.id;
-    chrome.experimental.infobars.show({tabId: lastInfoBarTabID, path: 'infobar.html?text=' + text});
-  });
-}
 
 function install() {
   Twitter.verify_credentials({install: true});

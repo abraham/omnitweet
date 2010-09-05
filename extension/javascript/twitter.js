@@ -1,7 +1,7 @@
 // Make requests to Twitter
 var Twitter = (function ()  {
   var my = {};
-  my.current_requests = {mentions: false, direct_messages: false, verify_credentials: false};
+  my.current_requests = {mentions: false, direct_messages: false, verify_credentials: false, status: false};
 
   // Get mentions
   my.mentions = function(options) {
@@ -70,6 +70,23 @@ var Twitter = (function ()  {
     };
     // Make request to Twitter for direct messages.
     Twitter.get('account/verify_credentials', callback);
+  }
+  
+  // Get single status
+  my.status = function(id, options) {
+    if (my.current_requests.status) {
+      return false;
+    }
+    var callback = function(result) {
+      if (200 == result.status && result.data){
+        Status.save(result.data);
+      }
+      my.current_requests.status = false;
+      console.log('Pulled new status :)');
+    };
+    var parameters = {};
+    // Make request to Twitter for mentions.
+    Twitter.get('statuses/show/' + id, callback, parameters);
   }
   
   // Make a GET request.

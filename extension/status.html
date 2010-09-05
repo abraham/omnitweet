@@ -12,7 +12,11 @@
   var actions = '';
   
   $(document).ready(function() {
-    $('#statusText').html(TwitterText.auto_link(statusObj.text));
+    $('#statusText').html(TwitterText.auto_link(statusObj.text, {
+      hashtag_url_base: 'https://twitter.com/search?q=%23',
+      list_url_base: 'https://twitter.com/',
+      username_url_base: 'https://twitter.com/'
+    }));
     $('#screenName').html('<a href="https://twitter.com/' + statusObj.user.screen_name + '">' + statusObj.user.screen_name + '</a>');
     $('#profileImage').html('<a href="https://twitter.com/' + statusObj.user.screen_name + '"><img width="48" height="48" src="' + statusObj.user.profile_image_url + '"/></a>');
     

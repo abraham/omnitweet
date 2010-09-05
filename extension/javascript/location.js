@@ -75,7 +75,7 @@ var Location = (function ()  {
         max_results: 5
       };
       // Make request to Twitter for nearby places.
-      Twitter.get('geo/szearch', callback, parameters);
+      Twitter.get('geo/search', callback, parameters);
     });
   }
   

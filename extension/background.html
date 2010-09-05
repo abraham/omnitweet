@@ -7,13 +7,12 @@
   <script type="text/javascript" src="libraries/twitter-text.js"></script>
   <script type="text/javascript" src="javascript/utilities.js"></script>
   <script type="text/javascript" src="javascript/status.js"></script>
+  <script type="text/javascript" src="javascript/location.js"></script>
   <script type="text/javascript" src="javascript/direct_message.js"></script>
   <script type="text/javascript" src="javascript/notice.js"></script>
   <script type="text/javascript" src="javascript/twitter.js"></script>
   <script type="text/javascript" src="javascript/poll.js"></script>
   <script>
-// Is users location currently being updateed.
-var currentLocationRequest = false;
 var lastTabID = 0;
 // Build OAuth stuff.
 var oauth = ChromeExOAuth.initBackgroundPage({
@@ -27,75 +26,11 @@ var oauth = ChromeExOAuth.initBackgroundPage({
   app_name: 'OmniTweet for Chrome'
 });
 
-// Get the place locations saved in localStorage. Will get new location if older then 15 min or true included.
-function getLocations(force) {
-  if (localStorage.geo_enabled == 'disabled') {
-    return false;
-  }
-  var d = new Date();
-  time = Math.floor(d.getTime() / 1000);
-  // Check if location is old  not existant or forced update.
-  if(force || !localStorage.geo_touched || parseInt(localStorage.geo_touched) + 15 * 60 <= time){
-    updateLocation();
-    return false;
-  }
-  return localStorage.places ? JSON.parse(localStorage.places) : false;
-}
-
-// Get current browser location and exchange for 5 neighborhoods from Twitter.
-function updateLocation() {
-  // Cancel if locations already being fetched.
-  if (currentLocationRequest || localStorage.geo_enabled == 'disabled') {
-    return false;
-  }
-  currentLocationRequest = true;
-  console.log('Updating location...');
-  // Get current location from browser.
-  navigator.geolocation.getCurrentPosition(function(position) {
-    if(!position) {
-      return false;
-    }
-    // Callback for places request
-    var callback = function(result) {
-      var d = new Date();
-      if (200 == result.status && result.data.result.places.length){
-        var places = [];
-        for(var place in result.data.result.places) {
-          places.push({
-            name: result.data.result.places[place].name,
-            id: result.data.result.places[place].id
-          });
-        }
-        // Cache location locally.
-        localStorage.places = JSON.stringify(places);
-        localStorage.latitude = position.coords.latitude;
-        localStorage.longitude = position.coords.longitude;
-      } else {
-        time = Math.floor(d.getTime() / 1000);
-        if(!localStorage.geo_touched || parseInt(localStorage.geo_touched) + 15 * 60 <= time){
-          infoBar();
-        }
-      }
-      localStorage.geo_touched = Math.floor(d.getTime() / 1000);
-      currentLocationRequest = false;
-      console.log('Location updated :)');
-    };
-    // Location parameters
-    var parameters = {
-      lat: position.coords.latitude,
-      long: position.coords.longitude,
-      max_results: 5
-    };
-    // Make OAuth request to Twitter for places.
-    Twitter.get('geo/search', callback, parameters);
-  });
-}
-
 // OmniBox selected OmnitTweet so update location.
 chrome.experimental.omnibox.onInputStarted.addListener(
   function() {
     modifyPageAction(140);
-    getLocations();
+    Location.search();
   });
 
 // OmniBox cancelled so remove character counter  
@@ -118,9 +53,9 @@ chrome.experimental.omnibox.onInputChanged.addListener(
     }
     modifyPageAction(140 - countCharacters(text));
     var as = localStorage.screen_name ? ' as @' + localStorage.screen_name : '';
-    var places = getLocations();
+    var places = Location.current();
     var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text + as}];
-    // Only suggets locations if the are available.
+    // Only suggest locations if the are available.
     if(places) {
       for(var place in places) {
         suggestions.push({
@@ -200,7 +135,7 @@ function install() {
   Twitter.verify_credentials({install: true});
   Twitter.direct_messages({silent: true});
   Twitter.mentions({silent: true});
-  updateLocation();
+  Location.search();
   localStorage.installed = 'true';
   Poll.start();
   console.log('OmiTweet installed successfully!');

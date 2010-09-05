@@ -14,6 +14,10 @@ var Notice = (function ()  {
 
   // Show status notice
   my.status = function(id) {
+    if (!localStorage['status_' + id]) {
+      console.log('Suck! Tried to load missing status :(')
+      return false;
+    }
     var notification = webkitNotifications.createHTMLNotification('status.html?id=' + id);
     notification.show();
   }

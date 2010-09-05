@@ -74,8 +74,6 @@ var geo_enabled;
 var default_options = {poll_frequency: 3, poll_for_mentions: 'enabled', poll_for_direct_messages: 'enabled', geo_enabled: 'enabled'};
 var default_options_name = {poll_frequency: 'Poll frequency', poll_for_mentions: 'Check for mentions', poll_for_direct_messages: 'Check for direct messages', geo_enabled: 'Location'};
 
-init();
-
 function init() {
   poll_frequency = document.omnitweet.poll_frequency;
   poll_frequency = document.getElementById('poll_frequency');
@@ -88,12 +86,14 @@ function init() {
   geo_enabled.checked = localStorage.geo_enabled != 'disabled'? true : false;
   if (localStorage.installed) {
     showUser();
+  } else {
+    checkIfInstalled();
   }
 }
 
 function showUser() {
   account = document.getElementById('account');
-  var user = JSON.parse(localStorage.user)
+  var user = JSON.parse(localStorage.user);
   account.innerHTML = '<span class="at_symbol">@</span><a href="https://twitter.com/' + user.screen_name + '">' + user.screen_name + '</a>';
 }
 
@@ -119,17 +119,22 @@ function flash(text) {
 function clearData() {
   if (confirm('Clear all saved options and information?')) {
     localStorage.clear();
-    flash('Options and saved information cleared.');
   }
 }
+
 function sendInstallMsg() {
-  chrome.extension.sendRequest({action: 'oauth'}, function(response) {
-      if (response.action == 'show') {
-        showUser();
-      }
-    }
-  );
+  chrome.extension.sendRequest({action: 'oauth'});
 }
+
+function checkIfInstalled() {
+  if (localStorage.installed && localStorage.user) {
+    showUser();
+  } else {
+    window.setTimeout('checkIfInstalled();', 1000);    
+  }
+}
+
+init();
 
 </script>
 </body>

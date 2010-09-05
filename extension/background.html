@@ -102,12 +102,7 @@ function install() {
 
 chrome.extension.onRequest.addListener(
   function(request, sender, sendResponse) {
-    switch (request.action){
-      case 'install':
-        install();
-      case 'oauth':
-        oauth.authorize(install);
-    }
+    oauth.authorize(install);
   }
 );
 

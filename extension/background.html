@@ -102,7 +102,7 @@ function modifyPageAction(count) {
   chrome.tabs.getSelected(null, function(tab) {
     lastTabID = tab.id;
     chrome.pageAction.show(lastTabID);
-    chrome.pageAction.setIcon({imageData: drawCount(count), tabId: lastTabID});
+    chrome.pageAction.setIcon({imageData: Notice.count(count), tabId: lastTabID});
   });
 }
 
@@ -111,24 +111,6 @@ function infoBar(text) {
     lastInfoBarTabID = tab.id;
     chrome.experimental.infobars.show({tabId: lastInfoBarTabID, path: 'infobar.html?text=' + text}, function(window){console.log(window)});
   });
-}
-
-// Draw the available character count page action.
-function drawCount(count) {
-  var canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.textAlign = "center";
-  context.fillStyle = '#CCCCCC';
-  context.textBaseline = "middle";
-  context.font = "bold 12px Helvetica Neue";
-  if (count < 10) {
-    context.fillStyle = '#D40D12';
-  } else if(count < 20) {
-    context.fillStyle = '#5C0002';
-  }
-  context.fillText(count, 9.5, 10);
-  return context.getImageData(0, 0, 19, 19);
 }
 
 function install() {

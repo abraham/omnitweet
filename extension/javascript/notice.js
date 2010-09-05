@@ -27,6 +27,24 @@ var Notice = (function ()  {
     var notification = webkitNotifications.createHTMLNotification('direct_message.html?id=' + id);
     notification.show();
   }
+
+  // Draw the available character count page action.
+  my.count = function(count) {
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.textAlign = "center";
+    context.fillStyle = '#CCCCCC';
+    context.textBaseline = "middle";
+    context.font = "bold 12px Helvetica Neue";
+    if (count < 10) {
+      context.fillStyle = '#D40D12';
+    } else if(count < 20) {
+      context.fillStyle = '#5C0002';
+    }
+    context.fillText(count, 9.5, 10);
+    return context.getImageData(0, 0, 19, 19);
+  }
   
   return my;
 }());

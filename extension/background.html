@@ -5,6 +5,7 @@
   <script type="text/javascript" src="libraries/chrome_ex_oauthsimple.js"></script>
   <script type="text/javascript" src="libraries/chrome_ex_oauth.js"></script>
   <script type="text/javascript" src="libraries/twitter-text.js"></script>
+  <script type="text/javascript" src="javascript/utilities.js"></script>
   <script type="text/javascript" src="javascript/status.js"></script>
   <script type="text/javascript" src="javascript/direct_message.js"></script>
   <script type="text/javascript" src="javascript/notice.js"></script>
@@ -160,18 +161,6 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     Twitter.update(status, {place_id: place_id});
   }
 );
-
-// Count characters and count each URL as 20 characters to match what t.co will be.
-function countCharacters(string) {
-  count = string.length;
-  urls = TwitterText.extract_urls(string);
-  if (urls.length != 0) {
-    for (var url in urls) {
-      count = count + (20 - urls[url].length);
-    }
-  }
-  return count;
-}
 
 // Change the count value of the page action.
 function modifyPageAction(count) {

@@ -1,6 +1,7 @@
 <html>
   <head>
   <!-- Include OAuth JavaScript files -->
+  <script type="text/javascript" src="config.js"></script>
   <script type="text/javascript" src="libraries/chrome_ex_oauthsimple.js"></script>
   <script type="text/javascript" src="libraries/chrome_ex_oauth.js"></script>
   <script type="text/javascript" src="libraries/twitter-text.js"></script>
@@ -19,8 +20,8 @@ var oauth = ChromeExOAuth.initBackgroundPage({
   authorize_url: 'https://api.twitter.com/oauth/authorize',
   access_url: 'https://api.twitter.com/oauth/access_token',
   // Make sure to include consumer key and secret from http://dev.twitter.com/apps.
-  consumer_key: '',
-  consumer_secret: '',
+  consumer_key: Config.consumer_key,
+  consumer_secret: Config.consumer_secret,
   scope: '',
   app_name: 'OmniTweet for Chrome'
 });

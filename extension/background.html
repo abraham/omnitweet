@@ -155,28 +155,9 @@ chrome.experimental.omnibox.onInputEntered.addListener(
       status = content.status;
     } else {
       status = content;
+      place_id = false;
     }
-    // Callback to show a desktop notification when a status is created.
-    var callback = function(result) {
-      if (200 == result.status){
-        Status.save(result.data);
-        Notice.status(result.data.id);
-        !localStorage.screen_name ? localStorage.screen_name = result.data.user.screen_name : false;
-        console.log('Tweet posted :)');
-      } else {
-        Notice.error('Oops... something went wrong', result.data.error)
-      }
-    }
-    // Text parameter for new status.
-    var parameters = {
-        status: status
-    }
-    // Attached place if requested.
-    if(content.place_id) { 
-      parameters.place_id = place_id;
-    }
-    // Post status to Twitter.
-    Twitter.post('statuses/update', callback, parameters);
+    Twitter.update(status, {place_id: place_id});
   }
 );
 

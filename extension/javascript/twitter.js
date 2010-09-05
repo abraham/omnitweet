@@ -1,7 +1,13 @@
 // Make requests to Twitter
 var Twitter = (function ()  {
   var my = {};
-  my.current_requests = {mentions: false, direct_messages: false, verify_credentials: false, status: false};
+  my.current_requests = {
+    mentions: false,
+    direct_messages: false,
+    verify_credentials: false,
+    status: false,
+    update: false
+  };
 
   // Get mentions
   my.mentions = function(options) {
@@ -87,6 +93,34 @@ var Twitter = (function ()  {
     var parameters = {};
     // Make request to Twitter for mentions.
     Twitter.get('statuses/show/' + id, callback, parameters);
+  }
+  
+  // Get single status
+  my.update = function(status, options) {
+    if (my.current_requests.status) {
+      return false;
+    }
+    // Callback to show a desktop notification when a status is created.
+    var callback = function(result) {
+      if (200 == result.status){
+        Status.save(result.data);
+        Notice.status(result.data.id);
+        !localStorage.screen_name ? localStorage.screen_name = result.data.user.screen_name : false;
+        console.log('Tweet posted :)');
+      } else {
+        Notice.error('Grrr... The tubberwebs are clogged and the tweet did not get posted. #fail!', result.data.error)
+      }
+    }
+    // Text parameter for new status.
+    var parameters = {
+        status: status
+    }
+    // Attached place if requested.
+    if(options.place_id) { 
+      parameters.place_id = options.place_id;
+    }
+    // Post status to Twitter.
+    Twitter.post('statuses/update', callback, parameters);
   }
   
   // Make a GET request.

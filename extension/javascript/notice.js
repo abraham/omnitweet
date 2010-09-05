@@ -2,6 +2,11 @@
 var Notice = (function ()  {
   var my = {};
   
+  my.last_id = {
+    info_bar: 0,
+    page_action: 0
+  };
+  
   // Show error notice.
   my.error = function(type, text){
     var notification = webkitNotifications.createNotification(
@@ -45,6 +50,21 @@ var Notice = (function ()  {
     context.fillText(count, 9.5, 10);
     return context.getImageData(0, 0, 19, 19);
   }
+
+  // Modify or remove page actions.
+  my.show_page_action = function(count) {
+    chrome.tabs.getSelected(null, function(tab) {
+      my.last_id.page_action = tab.id;
+      chrome.pageAction.show(tab.id);
+      chrome.pageAction.setIcon({imageData: Notice.count(count), tabId: tab.id});
+    });
+  }
   
+  my.hide_page_action = function() {
+    if (my.last_id.page_action) {
+      chrome.pageAction.hide(my.last_id.page_action);
+    }
+  }
+
   return my;
 }());

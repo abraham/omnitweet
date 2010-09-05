@@ -13,7 +13,6 @@
   <script type="text/javascript" src="javascript/twitter.js"></script>
   <script type="text/javascript" src="javascript/poll.js"></script>
   <script>
-var lastTabID = 0;
 // Build OAuth stuff.
 var oauth = ChromeExOAuth.initBackgroundPage({
   request_url: 'https://api.twitter.com/oauth/request_token',
@@ -29,18 +28,15 @@ var oauth = ChromeExOAuth.initBackgroundPage({
 // OmniBox selected OmnitTweet so update location.
 chrome.experimental.omnibox.onInputStarted.addListener(
   function() {
-    modifyPageAction(140);
+    Notice.show_page_action(140);
     Location.search();
   });
 
 // OmniBox cancelled so remove character counter  
 chrome.experimental.omnibox.onInputCancelled.addListener(
   function() {
-    // Remove page action if it exists.
-    if(lastTabID) {
-      chrome.pageAction.hide(lastTabID);
-      lastTabID = 0;    
-    }
+    // Remove page action.
+    Notice.hide_page_action();
   }
 );
 
@@ -48,10 +44,10 @@ chrome.experimental.omnibox.onInputCancelled.addListener(
 chrome.experimental.omnibox.onInputChanged.addListener(
   function(text, suggest) {
     if ('' == text) {
-      modifyPageAction(140);
+      Notice.show_page_action(140);
       return;
     }
-    modifyPageAction(140 - countCharacters(text));
+    Notice.show_page_action(140 - countCharacters(text));
     var as = localStorage.screen_name ? ' as @' + localStorage.screen_name : '';
     var places = Location.current();
     var suggestions = [{content: text, description: chrome.i18n.getMessage("verbTweet") + " " + text + as}];
@@ -80,10 +76,7 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     var status;
     var place_id;
     // Remove page action if it exists
-    if(lastTabID) {
-      chrome.pageAction.hide(lastTabID);
-      lastTabID = 0;    
-    }
+    Notice.hide_page_action();
     // Check if users hit enter in omnibar or on a dropdown suggestion.
     if (content.substring(0, 10) == '{"status":') {
       content = JSON.parse(content);
@@ -96,15 +89,6 @@ chrome.experimental.omnibox.onInputEntered.addListener(
     Twitter.update(status, {place_id: place_id});
   }
 );
-
-// Change the count value of the page action.
-function modifyPageAction(count) {
-  chrome.tabs.getSelected(null, function(tab) {
-    lastTabID = tab.id;
-    chrome.pageAction.show(lastTabID);
-    chrome.pageAction.setIcon({imageData: Notice.count(count), tabId: lastTabID});
-  });
-}
 
 function infoBar(text) {
   chrome.tabs.getSelected(null, function(tab) {

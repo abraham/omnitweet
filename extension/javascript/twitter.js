@@ -108,7 +108,7 @@ var Twitter = (function ()  {
         !localStorage.screen_name ? localStorage.screen_name = result.data.user.screen_name : false;
         console.log('Tweet posted :)');
       } else {
-        Notice.error('Grrr... The tubberwebs are clogged and the tweet did not get posted. #fail!', result.data.error)
+        Notice.error('Grrr... Something went wrong. #fail!', result.data.error)
       }
     }
     // Text parameter for new status.

@@ -62,10 +62,10 @@ var Location = (function ()  {
         } else {
           // Notify user of failure to update location. But not too often.
           if(my.stale()){
-            Notice.show_info_bar();
+            Notice.show_info_bar('Oops... something went wrong getting nearby places. Dust bunnies must be tripping up Twitter... ;(');
           }
         }
-        currentLocationRequest = false;
+        my.current_requests.search = false;
         my.touch();
         console.log('Location updated :)');
       };
@@ -75,7 +75,7 @@ var Location = (function ()  {
         max_results: 5
       };
       // Make request to Twitter for nearby places.
-      Twitter.get('geo/search', callback, parameters);
+      Twitter.get('geo/szearch', callback, parameters);
     });
   }
   

@@ -70,7 +70,8 @@ var Notice = (function ()  {
   my.show_info_bar = function(text) {
     chrome.tabs.getSelected(null, function(tab) {
       my.last_id.info_bar = tab.id;
-      chrome.experimental.infobars.show({tabId: tab.id, path: 'infobar.html?text=' + text});
+      localStorage.info_bar_message = text;
+      chrome.experimental.infobars.show({tabId: tab.id, path: 'infobar.html'});
     });
   }
   return my;

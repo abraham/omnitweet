@@ -25,6 +25,9 @@
     if (statusObj.place) {
       information += ' from <a href="http://maps.google.com/maps?q=' + statusObj.place.full_name + '" title="' + statusObj.place.full_name + '">' + statusObj.place.full_name + '</a>';
     }
+    if (statusObj.contributors) {
+      information += ' by <a href="https://twitter.com/account/redirect_by_id?id=' + statusObj.contributors[0] + '" title="by ' + statusObj.contributors[0] + '">' + statusObj.contributors[0] + '</a>';
+    }
     if (statusObj.in_reply_to_screen_name && statusObj.in_reply_to_status_id) {
       information += ' <a href="https://twitter.com/' + statusObj.in_reply_to_screen_name + '/status/' + statusObj.in_reply_to_status_id + '" title="' + statusObj.in_reply_to_screen_name + '">in reply to ' + statusObj.in_reply_to_screen_name + '</a>';
     }

@@ -2,16 +2,24 @@ OmniTweet for Chrome
 ====================
 An experimental minimalist Twitter Client for Google Chrome.
 
-Examples
+Features
 --------
 
 Posting tweet using the OmniBar:
 
 ![Tweeting from the OmniBar](http://github.com/abraham/omnitweet/raw/master/example.omnibar.png)
 
-Tweet notification:
+@mention notification:
 
 ![Tweet notification](http://github.com/abraham/omnitweet/raw/master/example.notification.png)
+
+Sending a direct message from the OmniBar:
+
+![Sending a direct message from the OmniBar](http://github.com/abraham/omnitweet/raw/master/example.omnibar.direct_message.png)
+
+Direct message notification:
+
+![Direct message notification](http://github.com/abraham/omnitweet/raw/master/example.notification.direct_message.png)
 
 Installation
 ------------

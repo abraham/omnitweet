@@ -19,7 +19,7 @@ var Twitter = (function ()  {
         localStorage.statuses_last_id = result.data[0].id;
         for(var status in result.data) {
           Status.save(result.data[status]);
-          if (options && options.silent != true) {
+          if (!options || options && options.silent != true) {
             Notice.status(result.data[status].id);
           }
         }
@@ -45,7 +45,7 @@ var Twitter = (function ()  {
         localStorage.direct_messages_last_id = result.data[0].id;
         for(var direct_messages in result.data) {
           DirectMessage.save(result.data[direct_messages]);
-          if (options && options.silent != true) {
+          if (!options || options && options.silent != true) {
             Notice.direct_message(result.data[direct_messages].id);
           }
         }

@@ -108,7 +108,6 @@ var Twitter = (function ()  {
       if (200 == result.status){
         Status.save(result.data);
         Notice.status(result.data.id);
-        !localStorage.screen_name ? localStorage.screen_name = result.data.user.screen_name : false;
         console.log('Tweet posted :)');
       } else {
         Notice.error('Grrr... Something went wrong. #fail!', result.data.error)
@@ -124,6 +123,27 @@ var Twitter = (function ()  {
     }
     // Post status to Twitter.
     Twitter.post('statuses/update', callback, parameters);
+  }
+  
+  // Send a direct message
+  my.message = function(screen_name, text) {
+    // Callback to show a desktop notification when a message is created.
+    var callback = function(result) {
+      if (200 == result.status){
+        DirectMessage.save(result.data);
+        Notice.direct_message(result.data.id);
+        console.log('Message sent :)');
+      } else {
+        Notice.error('Grrr... Something went wrong. #fail!', result.data.error)
+      }
+    }
+    // Text and recepient parameter for message.
+    var parameters = {
+        screen_name: screen_name,
+        text: text
+    }
+    // Post message to Twitter.
+    Twitter.post('direct_messages/new', callback, parameters);
   }
   
   // Make a GET request.

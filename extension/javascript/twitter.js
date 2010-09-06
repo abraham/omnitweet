@@ -118,7 +118,7 @@ var Twitter = (function ()  {
         status: status
     }
     // Attached place if requested.
-    if(options.place_id) { 
+    if(options && options.place_id) { 
       parameters.place_id = options.place_id;
     }
     // Post status to Twitter.

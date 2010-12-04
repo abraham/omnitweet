@@ -1,23 +1,13 @@
 // OmniBox selected OmnitTweet so update location.
 chrome.omnibox.onInputStarted.addListener(
   function() {
-    Notice.show_page_action(140);
     Location.search();
   });
-
-// OmniBox cancelled so remove character counter  
-chrome.omnibox.onInputCancelled.addListener(
-  function() {
-    // Remove page action.
-    Notice.hide_page_action();
-  }
-);
 
 // Suggest locations to user in OmniBox.
 chrome.omnibox.onInputChanged.addListener(
   function(command, suggest) {
     if ('' == command) {
-      Notice.show_page_action(140);
       return;
     }
     var suggestions = [];
@@ -30,30 +20,28 @@ chrome.omnibox.onInputChanged.addListener(
       if (command.length < screen_name.length + 4) {
         suggestions = [{
           content: JSON.stringify({message: message, screen_name: screen_name}),
-          description: 'Direct message @' + screen_name + ' ' + message + as
+          description: 'Direct message @' + screen_name + ' ' + message + as + '. ' + 142 - countCharacters(command)
         }];
       } else {
         suggestions = [{
           content: JSON.stringify({message: message, screen_name: screen_name}),
-          description: 'Direct message @' + screen_name + ' ' + message + as
+          description: 'Direct message @' + screen_name + ' ' + message + as + '. ' + 142 - countCharacters(command)
         }];
       }
-      Notice.show_page_action(140 + 3 + screen_name.length - countCharacters(command));
 
     } else {
 	
       var places = Location.current();
-      var suggestions = [{content: command, description: "<dim>Tweet</dim> " + command + as}];
+      var suggestions = [{content: command, description: "<dim>Tweet</dim> " + command + as + '. <dim>' + (140 - countCharacters(command)) + '</dim>'}];
       // Only suggest locations if the are available.
       if(places) {
         for(var place in places) {
           suggestions.push({
             content: JSON.stringify({status: command, place_id: places[place].id}),
-            description: "<dim>Tweet</dim> <match>" + command + "</match> <dim>from</dim> " + places[place].name + as
+            description: "<dim>Tweet</dim> <match>" + command + "</match> <dim>from " + places[place].name + as + '. ' + (140 - countCharacters(command)) + '</dim>'
           });
         }
       }
-      Notice.show_page_action(140 - countCharacters(command));
 
     }
     suggest(suggestions);
@@ -68,8 +56,6 @@ chrome.omnibox.onInputEntered.addListener(
     var place_id;
     var screen_name;
     var message;
-    // Remove page action if it exists
-    Notice.hide_page_action();
     // Check if user hit enter in omnibox or on a dropdown suggestion.
     if (command.substring(0, 10) == '{"status":') {
       // JSON encoded status to post.

@@ -21,9 +21,10 @@ chrome.omnibox.onInputChanged.addListener(
       return;
     }
     var suggestions = [];
-    var as = localStorage.user ? ' as @' + JSON.parse(localStorage.user).screen_name : '';
+    var as = localStorage.user ? ' <dim>as @' + JSON.parse(localStorage.user).screen_name + '</dim>': '';
     
     if (command.substring(0, 2) == 'd ') {
+	
       var screen_name = command.split(' ', 2)[1];
       var message = command.substring(3 + screen_name.length);
       if (command.length < screen_name.length + 4) {
@@ -34,35 +35,26 @@ chrome.omnibox.onInputChanged.addListener(
       } else {
         suggestions = [{
           content: JSON.stringify({message: message, screen_name: screen_name}),
-          description: 'Direct message @' + screen_name + ' ' + message + as,
-          descriptionStyles: [
-            chrome.omnibox.styleMatch(0),
-            chrome.omnibox.styleNone(13),
-            chrome.omnibox.styleMatch(screen_name.length + 17),
-            chrome.omnibox.styleNone(command.length + 14)
-          ]
+          description: 'Direct message @' + screen_name + ' ' + message + as
         }];
       }
       Notice.show_page_action(140 + 3 + screen_name.length - countCharacters(command));
+
     } else {
+	
       var places = Location.current();
-      var suggestions = [{content: command, description: "Tweet " + command + as}];
+      var suggestions = [{content: command, description: "<dim>Tweet</dim> " + command + as}];
       // Only suggest locations if the are available.
       if(places) {
         for(var place in places) {
           suggestions.push({
             content: JSON.stringify({status: command, place_id: places[place].id}),
-            description: "Tweet " + command + " from " + places[place].name + as,
-            descriptionStyles: [
-              chrome.omnibox.styleMatch(0),
-              chrome.omnibox.styleNone(6),
-              chrome.omnibox.styleMatch(command.length + 12),
-              chrome.omnibox.styleNone(command.length + places[place].name.length + 12),
-            ]
+            description: "<dim>Tweet</dim> <match>" + command + "</match> <dim>from</dim> " + places[place].name + as
           });
         }
       }
       Notice.show_page_action(140 - countCharacters(command));
+
     }
     suggest(suggestions);
   }

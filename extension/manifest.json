@@ -1,6 +1,6 @@
 {
   "name": "__MSG_extName__",
-  "version": "10",
+  "version": "11",
   "description": "__MSG_extDescription__",
   "icons": { 
     "16": "images/twitter.png",
@@ -14,7 +14,7 @@
   "default_locale": "en",
   "update_url": "http://github.com/abraham/omnitweet/raw/master/updates.xml",
   "background_page": "background.html",
-  "minimum_chrome_version": "7",
+  "minimum_chrome_version": "8",
   "options_page": "options.html",
   "permissions": [
     "https://api.twitter.com/",

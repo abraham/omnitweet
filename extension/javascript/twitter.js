@@ -16,11 +16,11 @@ var Twitter = (function ()  {
     }
     var callback = function(result) {
       if (200 == result.status && result.data.length){
-        localStorage.statuses_last_id = result.data[0].id;
+        localStorage.statuses_last_id = result.data[0].id_str;
         for(var status in result.data) {
           Status.save(result.data[status]);
           if (!options || options && options.silent != true) {
-            Notice.status(result.data[status].id);
+            Notice.status(result.data[status].id_str);
           }
         }
       }
@@ -42,11 +42,11 @@ var Twitter = (function ()  {
     }
     var callback = function(result) {
       if (200 == result.status && result.data.length){
-        localStorage.direct_messages_last_id = result.data[0].id;
+        localStorage.direct_messages_last_id = result.data[0].id_str;
         for(var direct_messages in result.data) {
           DirectMessage.save(result.data[direct_messages]);
           if (!options || options && options.silent != true) {
-            Notice.direct_message(result.data[direct_messages].id);
+            Notice.direct_message(result.data[direct_messages].id_str);
           }
         }
       }
@@ -107,7 +107,7 @@ var Twitter = (function ()  {
     var callback = function(result) {
       if (200 == result.status){
         Status.save(result.data);
-        Notice.status(result.data.id);
+        Notice.status(result.data.id_str);
         console.log('Tweet posted :)');
       } else {
         Notice.error('Grrr... Something went wrong. #fail!', result.data.error)
@@ -131,7 +131,7 @@ var Twitter = (function ()  {
     var callback = function(result) {
       if (200 == result.status){
         DirectMessage.save(result.data);
-        Notice.direct_message(result.data.id);
+        Notice.direct_message(result.data.id_str);
         console.log('Message sent :)');
       } else {
         Notice.error('Grrr... Something went wrong. #fail!', result.data.error)

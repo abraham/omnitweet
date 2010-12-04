@@ -23,5 +23,5 @@
     "tabs",
     "experimental"
     ],
-  "omnibox_keyword": "tweet"
+  "omnibox": { "keyword" : "t" }
 }

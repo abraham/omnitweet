@@ -7,19 +7,19 @@ Features
 
 Posting tweet using the OmniBox:
 
-![Tweeting from the OmniBox](http://github.com/abraham/omnitweet/raw/master/example.omnibox.png)
+![Tweeting from the OmniBox](./example.omnibox.png)
 
 @mention notification:
 
-![Tweet notification](http://github.com/abraham/omnitweet/raw/master/example.notification.png)
+![Tweet notification](./example.notification.png)
 
 Sending a direct message from the OmniBox:
 
-![Sending a direct message from the OmniBox](http://github.com/abraham/omnitweet/raw/master/example.omnibox.direct_message.png)
+![Sending a direct message from the OmniBox](./example.omnibox.direct_message.png)
 
 Direct message notification:
 
-![Direct message notification](http://github.com/abraham/omnitweet/raw/master/example.notification.direct_message.png)
+![Direct message notification](./example.notification.direct_message.png)
 
 Installation
 ------------
